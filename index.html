@@ -1,68 +1,68 @@
-<html>
-    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Custom Clock</title>
-        <style>
-            body {
-                font-family: Arial, sans-serif;
-                display: flex;
-                justify-content: center;
-                align-items: center;
-                height: 100vh;
-                margin: 0;
-            }
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Custom Clock</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #ffffff; /* Changed to light mode: white background */
+            color: #000000; /* Changed to light mode: black text */
+        }
 
-            .container {
-                text-align: center;
-            }
+        .container {
+            text-align: center;
+        }
 
-            .clock {
-                font-size: 30px;
-                margin: 20px 0;
-            }
+        .clock {
+            font-size: 30px;
+            margin: 20px 0;
+        }
 
-            .controls {
-                margin-top: 10px;
-            }
+        .controls {
+            margin-top: 10px;
+        }
 
-            label {
-                margin: 10px;
-            }
+        label {
+            margin: 10px;
+        }
 
-            input[type="color"] {
-                margin-left: 10px;
-            }
+        input[type="color"] {
+            margin-left: 10px;
+        }
 
-            input[type="range"] {
-                width: 80%
-            }
-        </style>
-    </head>
-    <body>
-        <div class="container">
-            <div class="clock" id="clock">00:00:00</div>
-            <div class="controls">
-                <label for="fontSize">Font Size:</label>
-                <input type="range" id="fontSize" min="10"
- max="100" value="30">
- 
-                <label for="bgColor">Background Color:</label>
-                <input type="color" id="bgColor" value="#000000">
+        input[type="range"] {
+            width: 80%;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="clock" id="clock">00:00:00</div>
+        <div class="controls">
+            <label for="fontSize">Font Size:</label>
+            <input type="range" id="fontSize" min="10" max="100" value="30">
 
-                <label for="textColor">Text Color:</label>
-                <input type="color" id="textColor" value="#ffffff">
+            <label for="bgColor">Background Color:</label>
+            <input type="color" id="bgColor" value="#ffffff"> <!-- Changed default to light mode -->
 
-                <label for="timeFormat">Time Format:</label>
-                <select id="timeFormat">
-                    <option value="12">12-hour</option>
-                    <option value="24">24-hour</option>
-                </select>
+            <label for="textColor">Text Color:</label>
+            <input type="color" id="textColor" value="#000000"> <!-- Changed default to dark text -->
 
-                <button id="reset">Reset</button>
-            </div>
+            <label for="timeFormat">Time Format:</label>
+            <select id="timeFormat">
+                <option value="12">12-hour</option>
+                <option value="24">24-hour</option>
+            </select>
+
+            <button id="reset">Reset</button>
         </div>
-    </body>
+    </div>
     <script>
         const clockElement = document.getElementById('clock');
         const fontSizeInput = document.getElementById('fontSize');
@@ -71,12 +71,12 @@
         const timeFormatSelect = document.getElementById('timeFormat');
         const resetButton = document.getElementById('reset');
 
-        // Get preferences from local storage
+        // Load preferences from local storage
         function loadPreferences() {
             const fontSize = localStorage.getItem('fontSize') || 30;
-            const bgColor = localStorage.getItem('bgColor') || '#000000';
-            const textColor = localStorage.getItem('textColor') || '#ffffff';
-            const timeFormat = localStorage.getItem('textFormat') || '12';
+            const bgColor = localStorage.getItem('bgColor') || '#ffffff'; // Default to white
+            const textColor = localStorage.getItem('textColor') || '#000000'; // Default to black
+            const timeFormat = localStorage.getItem('timeFormat') || '12';
 
             fontSizeInput.value = fontSize;
             bgColorInput.value = bgColor;
@@ -84,34 +84,33 @@
             timeFormatSelect.value = timeFormat;
 
             applyPreferences();
-            
         }
 
         // Apply customized preferences to the clock
         function applyPreferences() {
             const fontSize = fontSizeInput.value;
-            const bgColor = bgColorInput.value;
+            const bgColor = bgColorInput.value; // Corrected here
             const textColor = textColorInput.value;
 
-            clockElement.style.fontSize = `${fontSize}px`;
+            clockElement.style.fontSize = `${fontSize}px`; // Template literal corrected here
             document.body.style.backgroundColor = bgColor;
             clockElement.style.color = textColor;
 
             localStorage.setItem('fontSize', fontSize);
             localStorage.setItem('bgColor', bgColor);
-            localStorage.setItem('textColor', textColor)
+            localStorage.setItem('textColor', textColor);
         }
 
         // Update the clock
         function updateClock() {
             const date = new Date();
-            const hours = timeFormatSelect.value === '12' ? date.getHours() % 12 || 12 : date.getHours()
+            const hours = timeFormatSelect.value === '12' ? date.getHours() % 12 || 12 : date.getHours();
             const minutes = String(date.getMinutes()).padStart(2, '0');
             const seconds = String(date.getSeconds()).padStart(2, '0');
             clockElement.textContent = `${hours}:${minutes}:${seconds}`;
         }
 
-        // Check for options changes
+        // Event listeners for input changes
         fontSizeInput.addEventListener('input', applyPreferences);
         bgColorInput.addEventListener('input', applyPreferences);
         textColorInput.addEventListener('input', applyPreferences);
@@ -124,9 +123,10 @@
             localStorage.removeItem('textColor');
             localStorage.removeItem('timeFormat');
             loadPreferences();
+            updateClock(); // Update the clock after reset
         });
 
-        // Load preferences and start clock
+        // Load preferences and start the clock
         loadPreferences();
         setInterval(updateClock, 1000);
     </script>
